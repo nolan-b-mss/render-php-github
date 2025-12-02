@@ -1,11 +1,16 @@
-# Use an official PHP image with the Apache web server
-FROM php:8.2-apache
+# Start from the official PHP image with Apache (8.1 is a common modern version)
+FROM php:8.1-apache
 
-# Copy your application code into the web root directory of the container
-COPY . /var/www/html/
+# Set the working directory inside the container
+WORKDIR /var/www/html
 
-# Expose the default Apache port (Render automatically maps this)
-EXPOSE 80
+# Copy the core application file and the state persistence file
+# Note: Ensure count.txt exists in your repo and contains "0"
+COPY index.php .
+COPY count.txt .
 
-# The base image already has the CMD set to run Apache,
-# so no specific Start Command is needed in the Render dashboard.
+# CRITICAL FIX 🔒: Grant write permission to the PHP process for the count file.
+# This fixes the "Permission denied" warning shown earlier.
+RUN chmod 777 count.txt
+
+# The default CMD of this base image runs Apache, so we don't need a specific CMD line.
