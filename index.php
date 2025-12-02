@@ -11,13 +11,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // The logic from the Node.js application
     $myCheck = false;
-    if ($myInputText01 === 'fred') {
-        $myCheck = true;
-    }
-
+if ($myInputText01 === 'fred') {
+    // 1. Increment the count
+    $currentCount++;
+    
+    // 2. Write the new count back to the file
+    file_put_contents($filename, $currentCount); 
+    
     // Determine the result message and color
     if ($myCheck) {
-        $checkResult = "<b style='color:green'> Cool! </b>";
+    $checkResult = "<b style='color:green'> That's correct! </b> The magic word has been entered $currentCount times.";
+}
     } else {
         $checkResult = "<span style='color:red'> Try the magic word 'fred'</span>";
     }
