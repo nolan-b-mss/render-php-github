@@ -34,11 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PHP Counter</title>
+    <title>t2a27</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <h3>Render-PHP-Counter</h3>
+    <h3>t2a27-render-php-nolan</h3>
 
     <form action="" method="post" >
         <label for="myText01">Enter Text:</label>
