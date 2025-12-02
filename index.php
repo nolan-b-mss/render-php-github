@@ -1,48 +1,47 @@
 <?php
-// Initialize variables for the result message and the input text.
-$checkResult = "<span style='color:red'> Try the magic word 'fred'</span>";
-$myInputText01 = '';
+$filename = 'count.txt';
+$MAGIC_WORD = 'fred';
 
-// Check if the form was submitted (i.e., if the request method is POST)
+// Initialize the count variable and check for persistence file
+$currentCount = 0; 
+if (file_exists($filename)) {
+    $fileContent = file_get_contents($filename);
+    $currentCount = (int)$fileContent; 
+} 
+
+// Initialize the default display message
+$checkResult = "<span style='color:red'> Try the magic word 'fred'. Total Successes: $currentCount</span>";
+
+// Check if the form was submitted (POST request)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the input text from the form data.
-    // We use isset() and the null coalescing operator (??) for safety.
     $myInputText01 = $_POST['myText01'] ?? '';
 
-    // The logic from the Node.js application
-    $myCheck = false;
-if ($myInputText01 === 'fred') {
-    // 1. Increment the count
-    $currentCount++;
-    
-    // 2. Write the new count back to the file
-    file_put_contents($filename, $currentCount); 
-    
-    // Determine the result message and color
-    if ($myCheck) {
-    $checkResult = "<b style='color:green'> That's correct! </b> The magic word has been entered $currentCount times.";
-}
+    // Logic: Check input and update state
+    if ($myInputText01 === $MAGIC_WORD) {
+        $currentCount++; 
+        file_put_contents($filename, $currentCount); 
+
+        // Set the success message using the updated count
+        $checkResult = "<b style='color:green'> That's correct! </b> The magic word has been entered $currentCount times.";
     } else {
-        $checkResult = "<span style='color:red'> Try the magic word 'fred'</span>";
+        // On failure, show the current count
+        $checkResult = "<span style='color:red'> Try the magic word 'fred'. Total Successes: $currentCount</span>";
     }
 }
 
-// Now, render the HTML page, embedding the dynamic content.
-// The form's 'action' is set to the current file (index.php) and the method is 'post'.
+// Render the HTML page
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Browser Title</title>
+    <title>PHP Counter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <h3>Render-PHP-submit</h3>
+    <h3>Render-PHP-Counter</h3>
 
     <form action="" method="post" >
         <label for="myText01">Enter Text:</label>
-        <!-- The 'value' attribute keeps the entered text after submission -->
-   <!-- <input type="text" id="myText01" name="myText01" value="<?= htmlspecialchars($myInputText01); ?>"> -->
         <input type="text" id="myText01" name="myText01" value="">
         <input type="submit" value="Submit">
     </form>
